@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Bootcamp {
     private String nome;
@@ -13,8 +15,13 @@ public class Bootcamp {
     private final LocalDate dataFinal = dataInicial.plusDays(45);
     private Set<Dev> devsInscritos = new HashSet<>();
     private Set<Conteudo> conteudos = new LinkedHashSet<>();
-
-
+    
+    /**Inclusão do metodo recomendarConteudo**/
+    public Set<Conteudo>recomendarConteudo(Dev dev){
+    	return conteudos.stream().filter(conteudo ->!dev.getConteudosConcluidos().contains(conteudo))
+    			.collect(Collectors.toSet());
+    }
+    
     public String getNome() {
         return nome;
     }

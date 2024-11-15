@@ -6,6 +6,7 @@ public class Dev {
     private String nome;
     private Set<Conteudo> conteudosInscritos = new LinkedHashSet<>();
     private Set<Conteudo> conteudosConcluidos = new LinkedHashSet<>();
+    private static final double XP_MINIMO_CERTIFICACAO = 150; //
 
     public void inscreverBootcamp(Bootcamp bootcamp){
         this.conteudosInscritos.addAll(bootcamp.getConteudos());
@@ -21,6 +22,19 @@ public class Dev {
             System.err.println("Você não está matriculado em nenhum conteúdo!");
         }
     }
+    
+    /**Inclusão do método para indicação de conteúdos para a conclusão do boot camp**/
+    public void indicarConteudos(Bootcamp bootCamp) {
+    	Set<Conteudo> indicacoes = bootCamp.recomendarConteudo(this);
+    	if (indicacoes.isEmpty()) {
+			System.out.println("O aluno " +getNome() + " já concluiu todos os conteúdos do BootCamp");
+		}
+    	else {
+			System.out.print("Recomendamos para o aluno " +getNome());
+			indicacoes.forEach(conteudo -> System.out.println(" o curso " + conteudo.getTitulo() + " para a conclusão do BootCamp."));
+		}
+    	
+    }
 
     public double calcularTotalXp() {
         Iterator<Conteudo> iterator = this.conteudosConcluidos.iterator();
@@ -31,13 +45,29 @@ public class Dev {
         }
         return soma;
 
-        /*return this.conteudosConcluidos
+      /*return this.conteudosConcluidos
                 .stream()
                 .mapToDouble(Conteudo::calcularXp)
                 .sum();*/
     }
-
-
+    
+    /**Inclusão do metodo para calculo de total de xp para impressão de certificado de conclusão do curso**/
+    public boolean calculoCertifacadoConclusao() {
+		return calcularTotalXp() >= XP_MINIMO_CERTIFICACAO;
+    	
+    }
+    
+    /**Inclusão do metodo para validação e impressão de certificado de conclusão do curso**/
+    public String emitirCertificadoConclusao() {
+    	if (calculoCertifacadoConclusao()) {
+			return "Certificado emitido para " + getNome();
+		}
+    	else {
+    		return "O Aluno: " + getNome() + " não conseguir XP suficiente para impresão de certificado";
+    		
+    	}
+    }   
+    
     public String getNome() {
         return nome;
     }
